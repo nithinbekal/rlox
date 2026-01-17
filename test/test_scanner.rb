@@ -74,5 +74,13 @@ module Rlox
       assert_equal 456, tokens[2].literal
       assert_equal :EOF, tokens[3].type
     end
+
+    def test_comments
+      scanner = Scanner.new("// This is a comment")
+      tokens = scanner.scan_tokens
+
+      assert_equal 1, tokens.length
+      assert_equal :EOF, tokens[0].type
+    end
   end
 end

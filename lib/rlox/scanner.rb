@@ -45,7 +45,12 @@ module Rlox
       when "+" then add_token(:PLUS)
       when "-" then add_token(:MINUS)
       when "*" then add_token(:STAR)
-      when "/" then add_token(:SLASH)
+      when "/"
+        if peek == "/"
+          advance while peek != "\n" && !at_end?
+        else
+          add_token(:SLASH)
+        end
       when /\d/
         number_literal
       end
@@ -77,5 +82,7 @@ module Rlox
     end
 
     def peek_next = @source[@current + 1]
+
+    def at_end? = @current >= @source.length
   end
 end
