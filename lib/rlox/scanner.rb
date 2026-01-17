@@ -45,6 +45,7 @@ module Rlox
       when "+" then add_token(:PLUS)
       when "-" then add_token(:MINUS)
       when "*" then add_token(:STAR)
+      when ";" then add_token(:SEMICOLON)
       when "/"
         if peek == "/"
           advance while peek != "\n" && !at_end?

@@ -36,6 +36,14 @@ module Rlox
       assert_equal [:LEFT_CURLY_BRACE, :RIGHT_CURLY_BRACE, :EOF], tokens.map(&:type)
     end
 
+    def test_scan_semicolons
+      scanner = Scanner.new(";")
+      tokens = scanner.scan_tokens
+
+      assert_equal 2, tokens.length
+      assert_equal [:SEMICOLON, :EOF], tokens.map(&:type)
+    end
+
     def test_number_literal
       scanner = Scanner.new("123")
       tokens = scanner.scan_tokens
