@@ -90,5 +90,13 @@ module Rlox
       assert_equal 1, tokens.length
       assert_equal :EOF, tokens[0].type
     end
+
+    def test_equality_operators
+      scanner = Scanner.new("= < > <= >= == !=")
+      tokens = scanner.scan_tokens
+
+      assert_equal 8, tokens.length
+      assert_equal [:EQUAL, :LESS, :GREATER, :LESS_EQUAL, :GREATER_EQUAL, :EQUAL_EQUAL, :NOT_EQUAL, :EOF], tokens.map(&:type)
+    end
   end
 end

@@ -46,12 +46,11 @@ module Rlox
       when "-" then add_token(:MINUS)
       when "*" then add_token(:STAR)
       when ";" then add_token(:SEMICOLON)
-      when "/"
-        if peek == "/"
-          advance while peek != "\n" && !at_end?
-        else
-          add_token(:SLASH)
-        end
+      when "=" then match("=") ? add_token(:EQUAL_EQUAL) : add_token(:EQUAL)
+      when "!" then match("=") ? add_token(:NOT_EQUAL) : add_token(:BANG)
+      when "<" then match("=") ? add_token(:LESS_EQUAL) : add_token(:LESS)
+      when ">" then match("=") ? add_token(:GREATER_EQUAL) : add_token(:GREATER)
+      when "/" then add_token(:SLASH) unless match("/")
       when /\d/
         number_literal
       end
@@ -85,5 +84,13 @@ module Rlox
     def peek_next = @source[@current + 1]
 
     def at_end? = @current >= @source.length
+
+    def match(c)
+      return false if at_end?
+      return false if peek != c
+
+      advance
+      true
+    end
   end
 end
