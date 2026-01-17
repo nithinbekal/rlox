@@ -5,4 +5,7 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/StringLiteralsInInterpolation:
-  EnforcedStyle: double_quotes
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
