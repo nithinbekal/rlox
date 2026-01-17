@@ -42,6 +42,8 @@ module Rlox
       when "]" then add_token(:RIGHT_BRACKET)
       when "{" then add_token(:LEFT_CURLY_BRACE)
       when "}" then add_token(:RIGHT_CURLY_BRACE)
+      when /\d/
+        number_literal
       end
     end
 
@@ -51,9 +53,25 @@ module Rlox
       c
     end
 
+    def peek = @source[@current]
+
     def add_token(type)
       text = @source[@start..@current - 1]
       @tokens << Token.new(type, text, nil, @line)
     end
+
+    def number_literal
+      advance while peek&.match?(/\d/)
+
+      if peek == "." && peek_next&.match?(/\d/)
+        advance
+        advance while peek&.match?(/\d/)
+      end
+
+      text = @source[@start..@current - 1]
+      @tokens << Token.new(:NUMBER, text, text.to_f, @line)
+    end
+
+    def peek_next = @source[@current + 1]
   end
 end
