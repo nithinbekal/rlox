@@ -42,6 +42,10 @@ module Rlox
       when "]" then add_token(:RIGHT_BRACKET)
       when "{" then add_token(:LEFT_CURLY_BRACE)
       when "}" then add_token(:RIGHT_CURLY_BRACE)
+      when "+" then add_token(:PLUS)
+      when "-" then add_token(:MINUS)
+      when "*" then add_token(:STAR)
+      when "/" then add_token(:SLASH)
       when /\d/
         number_literal
       end
