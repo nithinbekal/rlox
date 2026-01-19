@@ -98,5 +98,15 @@ module Rlox
       assert_equal 8, tokens.length
       assert_equal [:EQUAL, :LESS, :GREATER, :LESS_EQUAL, :GREATER_EQUAL, :EQUAL_EQUAL, :NOT_EQUAL, :EOF], tokens.map(&:type)
     end
+
+    def test_string_literal
+      scanner = Scanner.new('"hello"')
+      tokens = scanner.scan_tokens
+
+      assert_equal 2, tokens.length
+      assert_equal :STRING, tokens[0].type
+      assert_equal "hello", tokens[0].literal
+      assert_equal :EOF, tokens[1].type
+    end
   end
 end

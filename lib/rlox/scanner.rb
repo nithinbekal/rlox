@@ -51,6 +51,7 @@ module Rlox
       when "<" then match("=") ? add_token(:LESS_EQUAL) : add_token(:LESS)
       when ">" then match("=") ? add_token(:GREATER_EQUAL) : add_token(:GREATER)
       when "/" then add_token(:SLASH) unless match("/")
+      when '"' then string_literal
       when /\d/
         number_literal
       end
@@ -69,6 +70,17 @@ module Rlox
       @tokens << Token.new(type, text, nil, @line)
     end
 
+    def string_literal
+      while peek != '"' && !at_end?
+        advance
+      end
+
+      advance # Consume closing "
+
+      text = @source[@start + 1..@current - 2]
+      @tokens << Token.new(:STRING, @source[@start..@current - 1], text, @line)
+    end
+
     def number_literal
       advance while peek&.match?(/\d/)
 
@@ -82,8 +94,6 @@ module Rlox
     end
 
     def peek_next = @source[@current + 1]
-
-    def at_end? = @current >= @source.length
 
     def match(c)
       return false if at_end?
