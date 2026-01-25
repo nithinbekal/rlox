@@ -22,6 +22,7 @@ module Rlox
       "while" => :WHILE,
     }.freeze
 
+    #: (source String) -> void
     def initialize(source)
       @source = source
       @tokens = []
@@ -30,6 +31,7 @@ module Rlox
       @line = 1
     end
 
+    #: -> Array[Token]
     def scan_tokens
       until at_end?
         @start = @current
@@ -43,6 +45,7 @@ module Rlox
 
     private
 
+    #: -> void
     def scan_token
       c = advance
 
@@ -68,17 +71,23 @@ module Rlox
       end
     end
 
+    #: -> String
     def advance
       c = @source[@current]
       @current += 1
       c
     end
 
+    #: -> bool
     def at_end? = @current >= @source.length
 
+    #: -> String
     def peek = @source[@current]
+
+    #: -> String
     def peek_next = @source[@current + 1]
 
+    #: (c String) -> bool
     def match?(c)
       return false if at_end?
       return false if peek != c
@@ -88,17 +97,20 @@ module Rlox
       true
     end
 
+    #: (type Symbol) -> void
     def add_token(type)
       text = @source[@start..(@current - 1)]
       @tokens << Token.new(type, text, nil, @line)
     end
 
+    #: -> void
     def comment_token
       advance while peek != "\n" && !at_end?
 
       add_token(:COMMENT)
     end
 
+    #: -> void
     def string_literal
       advance while peek != '"' && !at_end?
 
@@ -108,6 +120,7 @@ module Rlox
       @tokens << Token.new(:STRING, @source[@start..(@current - 1)], text, @line)
     end
 
+    #: -> void
     def number_literal
       advance while peek&.match?(/\d/)
 
@@ -120,6 +133,7 @@ module Rlox
       @tokens << Token.new(:NUMBER, text, text.to_f, @line)
     end
 
+    #: -> void
     def identifier
       advance while peek&.match?(/\w/)
 
