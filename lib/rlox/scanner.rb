@@ -54,6 +54,8 @@ module Rlox
       when '"' then string_literal
       when /\d/
         number_literal
+      when /\w/
+        identifier
       end
     end
 
@@ -71,9 +73,7 @@ module Rlox
     end
 
     def string_literal
-      while peek != '"' && !at_end?
-        advance
-      end
+      advance while peek != '"' && !at_end?
 
       advance # Consume closing "
 
@@ -91,6 +91,13 @@ module Rlox
 
       text = @source[@start..@current - 1]
       @tokens << Token.new(:NUMBER, text, text.to_f, @line)
+    end
+
+    def identifier
+      advance while peek&.match?(/\w/)
+
+      text = @source[@start..@current - 1]
+      @tokens << Token.new(:IDENTIFIER, text, nil, @line)
     end
 
     def peek_next = @source[@current + 1]

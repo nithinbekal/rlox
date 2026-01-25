@@ -75,12 +75,10 @@ module Rlox
       tokens = scanner.scan_tokens
 
       assert_equal 4, tokens.length
-      assert_equal :NUMBER, tokens[0].type
-      assert_equal 123, tokens[0].literal
-      assert_equal :PLUS, tokens[1].type
-      assert_equal :NUMBER, tokens[2].type
-      assert_equal 456, tokens[2].literal
-      assert_equal :EOF, tokens[3].type
+
+      assert_equal Token.new(:NUMBER, "123", 123, 1), tokens[0]
+      assert_equal Token.new(:PLUS, "+", nil, 1), tokens[1]
+      assert_equal Token.new(:NUMBER, "456", 456, 1), tokens[2]
     end
 
     def test_comments
@@ -96,7 +94,8 @@ module Rlox
       tokens = scanner.scan_tokens
 
       assert_equal 8, tokens.length
-      assert_equal [:EQUAL, :LESS, :GREATER, :LESS_EQUAL, :GREATER_EQUAL, :EQUAL_EQUAL, :NOT_EQUAL, :EOF], tokens.map(&:type)
+      assert_equal [:EQUAL, :LESS, :GREATER, :LESS_EQUAL, :GREATER_EQUAL, :EQUAL_EQUAL, :NOT_EQUAL, :EOF],
+                   tokens.map(&:type)
     end
 
     def test_string_literal
@@ -107,6 +106,19 @@ module Rlox
       assert_equal :STRING, tokens[0].type
       assert_equal "hello", tokens[0].literal
       assert_equal :EOF, tokens[1].type
+    end
+
+    def test_identifier
+      scanner = Scanner.new("var x = 123;")
+      tokens = scanner.scan_tokens
+
+      assert_equal 6, tokens.length
+
+      assert_equal Token.new(:IDENTIFIER, "var", nil, 1), tokens[0]
+      assert_equal Token.new(:IDENTIFIER, "x", nil, 1), tokens[1]
+      assert_equal Token.new(:EQUAL, "=", nil, 1), tokens[2]
+      assert_equal Token.new(:NUMBER, "123", 123, 1), tokens[3]
+      assert_equal Token.new(:SEMICOLON, ";", nil, 1), tokens[4]
     end
   end
 end
