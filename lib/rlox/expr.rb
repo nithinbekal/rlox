@@ -3,6 +3,9 @@
 module Rlox
   #: @abstract
   class Expr
+    def accept(visitor)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 
   class Binary < Expr
