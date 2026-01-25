@@ -85,8 +85,8 @@ module Rlox
       scanner = Scanner.new("// This is a comment")
       tokens = scanner.scan_tokens
 
-      assert_equal 1, tokens.length
-      assert_equal :EOF, tokens[0].type
+      assert_equal 2, tokens.length
+      assert_equal Token.new(:COMMENT, "// This is a comment", nil, 1), tokens[0]
     end
 
     def test_equality_operators

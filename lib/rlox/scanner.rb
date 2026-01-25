@@ -50,12 +50,10 @@ module Rlox
       when "!" then match("=") ? add_token(:NOT_EQUAL) : add_token(:BANG)
       when "<" then match("=") ? add_token(:LESS_EQUAL) : add_token(:LESS)
       when ">" then match("=") ? add_token(:GREATER_EQUAL) : add_token(:GREATER)
-      when "/" then add_token(:SLASH) unless match("/")
+      when "/" then match("/") ? comment_token : add_token(:SLASH)
       when '"' then string_literal
-      when /\d/
-        number_literal
-      when /\w/
-        identifier
+      when /\d/ then number_literal
+      when /\w/ then identifier
       end
     end
 
@@ -70,6 +68,12 @@ module Rlox
     def add_token(type)
       text = @source[@start..@current - 1]
       @tokens << Token.new(type, text, nil, @line)
+    end
+
+    def comment_token
+      advance while peek != "\n" && !at_end?
+
+      add_token(:COMMENT)
     end
 
     def string_literal
