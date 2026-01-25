@@ -15,7 +15,7 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Enabled: false
 
-Style/MethodParameterName:
+Naming/MethodParameterName:
   Enabled: false
 
 Style/StringLiterals:
@@ -24,5 +24,15 @@ Style/StringLiterals:
 Style/StringLiteralsInInterpolation:
   Enabled: false
 
+Style/WordArray:
+  Enabled: false
+
 Style/SymbolArray:
   EnforcedStyle: brackets
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+

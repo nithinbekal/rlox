@@ -4,7 +4,22 @@ module Rlox
   # Scanner class for Lox
   class Scanner
     KEYWORDS = {
-      "var" => :VAR
+      "and" => :AND,
+      "class" => :CLASS,
+      "else" => :ELSE,
+      "false" => :FALSE,
+      "for" => :FOR,
+      "fun" => :FUN,
+      "if" => :IF,
+      "nil" => :NIL,
+      "or" => :OR,
+      "print" => :PRINT,
+      "return" => :RETURN,
+      "super" => :SUPER,
+      "this" => :THIS,
+      "true" => :TRUE,
+      "var" => :VAR,
+      "while" => :WHILE,
     }.freeze
 
     def initialize(source)
@@ -109,7 +124,8 @@ module Rlox
       advance while peek&.match?(/\w/)
 
       text = @source[@start..(@current - 1)]
-      @tokens << Token.new(:IDENTIFIER, text, nil, @line)
+      type = KEYWORDS[text] || :IDENTIFIER
+      @tokens << Token.new(type, text, nil, @line)
     end
   end
 end

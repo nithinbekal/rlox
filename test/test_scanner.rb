@@ -114,7 +114,7 @@ module Rlox
 
       assert_equal 6, tokens.length
 
-      assert_equal Token.new(:IDENTIFIER, "var", nil, 1), tokens[0]
+      assert_equal Token.new(:VAR, "var", nil, 1), tokens[0]
       assert_equal Token.new(:IDENTIFIER, "x", nil, 1), tokens[1]
       assert_equal Token.new(:EQUAL, "=", nil, 1), tokens[2]
       assert_equal Token.new(:NUMBER, "123", 123, 1), tokens[3]
