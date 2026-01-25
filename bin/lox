@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/rlox"
+
+def run_file(path)
+  source = File.read(path)
+  run(source)
+rescue Errno::ENOENT
+  warn "Error: Could not find file '#{path}'"
+  exit 66
+end
+
+def run(source)
+  scanner = Rlox::Scanner.new(source)
+  tokens = scanner.scan_tokens
+
+  tokens.each do |token|
+    puts token
+  end
+end
+
+if ARGV.length != 1
+  warn "Usage: lox [script]"
+  exit 64
+end
+
+run_file(ARGV[0])
