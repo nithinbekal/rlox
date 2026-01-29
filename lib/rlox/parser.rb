@@ -19,14 +19,18 @@ module Rlox
     attr_reader :tokens #: Array[Token]
     attr_reader :current #: Integer
 
-    # expression → equality
+    # BNF: expression → equality
     #
     #: -> Expr
     def expression
       equality
     end
 
-    # equality → comparison ( ( "!=" | "==" ) comparison )*
+    # BNF: equality → comparison ( ( "!=" | "==" ) comparison )*
+    #
+    # Examples:
+    #   1 == 2
+    #   1 != 2
     #
     #: -> Expr
     def equality
@@ -39,6 +43,104 @@ module Rlox
       end
 
       expression
+    end
+
+    # BNF: comparison → term ( ( ">" | ">=" | "<" | "<=" ) term )*
+    #
+    # Examples:
+    #   1 > 2
+    #   1 >= 2
+    #
+    #: -> Expr
+    def comparison
+      expression = term
+
+      while match?(:LESS, :LESS_EQUAL, :GREATER, :GREATER_EQUAL)
+        operator = previous.type
+        right = term
+        expression = Binary.new(expression, operator, right)
+      end
+
+      expression
+    end
+
+    # BNF: term → factor ( ( "-" | "+" ) factor )*
+    #
+    # Examples:
+    #   1 - 2
+    #   1 + 2
+    #
+    #: -> Expr
+    def term
+      expression = factor
+
+      while match?(:MINUS, :PLUS)
+        operator = previous.type
+        right = factor
+        expression = Binary.new(expression, operator, right)
+      end
+
+      expression
+    end
+
+    # BNF: factor → unary ( ( "/" | "*" ) unary )*
+    #
+    # Examples:
+    #   1 / 2
+    #   1 * 2
+    #
+    #: -> Expr
+    def factor
+      expression = unary
+
+      while match?(:SLASH, :STAR)
+        operator = previous.type
+        right = unary
+        expression = Binary.new(expression, operator, right)
+      end
+
+      expression
+    end
+
+    # BNF: unary → ( "!" | "-" ) unary | primary
+    #
+    # Examples:
+    #   !1
+    #   -1
+    #
+    #: -> Expr
+    def unary
+      if match?(:BANG, :MINUS)
+        operator = previous.type
+        right = unary
+        return Unary.new(operator, right)
+      end
+
+      primary
+    end
+
+    # primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
+    #
+    # Examples:
+    #   1
+    #   "hello"
+    #   true
+    #   false
+    #   nil
+    #   (1 + 2)
+    #
+    #: -> Expr?
+    def primary
+      return Literal.new(false) if match?(:FALSE)
+      return Literal.new(true) if match?(:TRUE)
+      return Literal.new(nil) if match?(:NIL)
+      return Literal.new(previous.literal) if match?(:NUMBER, :STRING)
+
+      return unless match?(:LEFT_PAREN)
+
+      expr = expression
+      consume(:RIGHT_PAREN, "Expected ')' after expression")
+      Grouping.new(expr)
     end
 
     #: (*types Symbol) -> bool
@@ -61,80 +163,6 @@ module Rlox
       return @tokens[@current] if @current < @tokens.length
 
       @tokens[-1]
-    end
-
-    # comparison → term ( ( ">" | ">=" | "<" | "<=" ) term )*
-    #
-    #: -> Expr
-    def comparison
-      expression = term
-
-      while match?(:LESS, :LESS_EQUAL, :GREATER, :GREATER_EQUAL)
-        operator = previous.type
-        right = term
-        expression = Binary.new(expression, operator, right)
-      end
-
-      expression
-    end
-
-    # term → factor ( ( "-" | "+" ) factor )*
-    #
-    #: -> Expr
-    def term
-      expression = factor
-
-      while match?(:MINUS, :PLUS)
-        operator = previous.type
-        right = factor
-        expression = Binary.new(expression, operator, right)
-      end
-
-      expression
-    end
-
-    # factor → unary ( ( "/" | "*" ) unary )*
-    #
-    #: -> Expr
-    def factor
-      expression = unary
-
-      while match?(:SLASH, :STAR)
-        operator = previous.type
-        right = unary
-        expression = Binary.new(expression, operator, right)
-      end
-
-      expression
-    end
-
-    # unary → ( "!" | "-" ) unary | primary
-    #
-    #: -> Expr
-    def unary
-      if match?(:BANG, :MINUS)
-        operator = previous.type
-        right = unary
-        return Unary.new(operator, right)
-      end
-
-      primary
-    end
-
-    # primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
-    #
-    #: -> Expr?
-    def primary
-      return Literal.new(false) if match?(:FALSE)
-      return Literal.new(true) if match?(:TRUE)
-      return Literal.new(nil) if match?(:NIL)
-      return Literal.new(previous.literal) if match?(:NUMBER, :STRING)
-
-      return unless match?(:LEFT_PAREN)
-
-      expr = expression
-      consume(:RIGHT_PAREN, "Expected ')' after expression")
-      Grouping.new(expr)
     end
 
     #: (type Symbol, message String) -> Token
