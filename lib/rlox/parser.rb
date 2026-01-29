@@ -12,7 +12,7 @@ module Rlox
     #: -> Array[Expr]
     def parse
       [expression]
-    rescue ParserError => e
+    rescue ParserError
       nil
     end
 
