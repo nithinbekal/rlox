@@ -19,11 +19,15 @@ module Rlox
     attr_reader :tokens #: Array[Token]
     attr_reader :current #: Integer
 
+    # expression → equality
+    #
     #: -> Expr
     def expression
       equality
     end
 
+    # equality → comparison ( ( "!=" | "==" ) comparison )*
+    #
     #: -> Expr
     def equality
       expression = comparison
@@ -59,6 +63,8 @@ module Rlox
       @tokens[-1]
     end
 
+    # comparison → term ( ( ">" | ">=" | "<" | "<=" ) term )*
+    #
     #: -> Expr
     def comparison
       expression = term
@@ -72,6 +78,8 @@ module Rlox
       expression
     end
 
+    # term → factor ( ( "-" | "+" ) factor )*
+    #
     def term
       expression = factor
 
@@ -84,6 +92,8 @@ module Rlox
       expression
     end
 
+    # factor → unary ( ( "/" | "*" ) unary )*
+    #
     def factor
       expression = unary
 
@@ -96,6 +106,8 @@ module Rlox
       expression
     end
 
+    # unary → ( "!" | "-" ) unary | primary
+    #
     def unary
       if match?(:BANG, :MINUS)
         operator = previous.type
@@ -106,6 +118,8 @@ module Rlox
       primary
     end
 
+    # primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
+    #
     def primary
       return Literal.new(false) if match?(:FALSE)
       return Literal.new(true) if match?(:TRUE)
