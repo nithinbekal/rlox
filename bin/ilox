@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/rlox"
+
+def run_prompt
+  puts "Lox REPL - Press Ctrl+C or Ctrl+D to exit"
+
+  loop do
+    print "> "
+    line = gets
+    break if line.nil?
+
+    line = line.chomp
+    next if line.empty?
+
+    run(line)
+  rescue StandardError => e
+    puts "Error: #{e.message}"
+  end
+rescue Interrupt
+  puts "\nBye!"
+end
+
+def run(source)
+  scanner = Rlox::Scanner.new(source)
+  tokens = scanner.scan_tokens
+  parser = Rlox::Parser.new(tokens)
+  expression = parser.parse
+
+  return if expression.nil?
+
+  printer = Rlox::AstPrinter.new
+  puts printer.print(expression)
+end
+
+run_prompt
