@@ -12,8 +12,6 @@ module Rlox
     #: -> Array[Expr]
     def parse
       [expression]
-    rescue ParserError
-      nil
     end
 
     private
