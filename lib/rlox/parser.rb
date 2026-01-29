@@ -143,6 +143,18 @@ module Rlox
       Grouping.new(expr)
     end
 
+    #: -> void
+    def synchronize
+      advance
+
+      until at_end?
+        return if previous.type == :SEMICOLON
+        return if [:CLASS, :FUN, :VAR, :FOR, :IF, :WHILE, :PRINT, :RETURN].include?(peek.type)
+
+        advance
+      end
+    end
+
     #: (*types Symbol) -> bool
     def match?(*types)
       types.any? do |type|
@@ -171,5 +183,8 @@ module Rlox
 
       raise ParserError, message
     end
+
+    #: -> bool
+    def at_end? = peek.type == :EOF
   end
 end
