@@ -1,0 +1,4 @@
+--dir
+.
+--enable-experimental-rbs-comments
+--ignore=test/
