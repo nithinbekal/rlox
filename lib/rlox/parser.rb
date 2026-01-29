@@ -80,6 +80,7 @@ module Rlox
 
     # term → factor ( ( "-" | "+" ) factor )*
     #
+    #: -> Expr
     def term
       expression = factor
 
@@ -94,6 +95,7 @@ module Rlox
 
     # factor → unary ( ( "/" | "*" ) unary )*
     #
+    #: -> Expr
     def factor
       expression = unary
 
@@ -108,6 +110,7 @@ module Rlox
 
     # unary → ( "!" | "-" ) unary | primary
     #
+    #: -> Expr
     def unary
       if match?(:BANG, :MINUS)
         operator = previous.type
@@ -120,6 +123,7 @@ module Rlox
 
     # primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
     #
+    #: -> Expr?
     def primary
       return Literal.new(false) if match?(:FALSE)
       return Literal.new(true) if match?(:TRUE)
@@ -133,6 +137,7 @@ module Rlox
       Grouping.new(expr)
     end
 
+    #: (type Symbol, message String) -> Token
     def consume(type, message)
       return previous if match?(type)
 
