@@ -66,7 +66,7 @@ module Rlox
         Token.new(:EOF, "", nil, 1),
       ]
       parser = Parser.new(tokens)
-      error = assert_raises(RuntimeError) { parser.parse }
+      error = assert_raises(ParserError) { parser.parse }
       assert_equal "Expected ')' after expression", error.message
     end
   end

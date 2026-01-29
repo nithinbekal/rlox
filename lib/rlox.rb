@@ -9,5 +9,5 @@ require_relative "rlox/parser"
 
 module Rlox
   class Error < StandardError; end
-  # Your code goes here...
+  class ParserError < Error; end
 end

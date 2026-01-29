@@ -122,7 +122,7 @@ module Rlox
     def consume(type, message)
       return previous if match?(type)
 
-      raise message
+      raise ParserError, message
     end
   end
 end
