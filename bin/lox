@@ -14,10 +14,11 @@ end
 def run(source)
   scanner = Rlox::Scanner.new(source)
   tokens = scanner.scan_tokens
+  parser = Rlox::Parser.new(tokens)
+  expression = parser.parse
 
-  tokens.each do |token|
-    puts token
-  end
+  printer = Rlox::AstPrinter.new
+  puts printer.print(expression)
 end
 
 if ARGV.length != 1
