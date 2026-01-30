@@ -54,10 +54,10 @@ GEM
       parser (>= 3.3.7.2)
       prism (~> 1.7)
     ruby-progressbar (1.13.0)
-    sorbet (0.6.12904)
-      sorbet-static (= 0.6.12904)
-    sorbet-static (0.6.12904-universal-darwin)
-    sorbet-static (0.6.12904-x86_64-linux)
+    sorbet (0.6.12908)
+      sorbet-static (= 0.6.12908)
+    sorbet-static (0.6.12908-universal-darwin)
+    sorbet-static (0.6.12908-x86_64-linux)
     stringio (3.2.0)
     tsort (0.2.0)
     unicode-display_width (3.2.0)
@@ -102,9 +102,9 @@ CHECKSUMS
   rubocop (1.82.1) sha256=09f1a6a654a960eda767aebea33e47603080f8e9c9a3f019bf9b94c9cab5e273
   rubocop-ast (1.49.0) sha256=49c3676d3123a0923d333e20c6c2dbaaae2d2287b475273fddee0c61da9f71fd
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
-  sorbet (0.6.12904) sha256=9604b3ce773c29b9fdfe85107884059ada4bd585207db9a347eeede427e3abec
-  sorbet-static (0.6.12904-universal-darwin) sha256=56a8e94dbfccc19574fec9eff05c1a1b462e382d8c95991013268c0032bbf720
-  sorbet-static (0.6.12904-x86_64-linux) sha256=2ffffff1cc86dcce9c56909b72d1b141795b7dbd0e6f6befc7e9f0b87ec5da34
+  sorbet (0.6.12908) sha256=5490cc7c2018ff91f9cffe38d5fe8a0abd57bcc80a5277d5a2a663693c56aad2
+  sorbet-static (0.6.12908-universal-darwin) sha256=bb8dc22b4c7b8809e8a609a46e080581408563f8bb3ef39d4c43ca5c6f45bf86
+  sorbet-static (0.6.12908-x86_64-linux) sha256=2f66fbfc0a8bb7df9a1cf3f9f7e54fc9e1a4fe6b3e8f45b0366c517eb9b8e04e
   stringio (3.2.0) sha256=c37cb2e58b4ffbd33fe5cd948c05934af997b36e0b6ca6fdf43afa234cf222e1
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f
   unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
