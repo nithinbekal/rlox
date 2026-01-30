@@ -57,6 +57,7 @@ GEM
     sorbet (0.6.12904)
       sorbet-static (= 0.6.12904)
     sorbet-static (0.6.12904-universal-darwin)
+    sorbet-static (0.6.12904-x86_64-linux)
     stringio (3.2.0)
     tsort (0.2.0)
     unicode-display_width (3.2.0)
@@ -65,6 +66,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-24
+  x86_64-linux
 
 DEPENDENCIES
   irb
@@ -102,6 +104,7 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   sorbet (0.6.12904) sha256=9604b3ce773c29b9fdfe85107884059ada4bd585207db9a347eeede427e3abec
   sorbet-static (0.6.12904-universal-darwin) sha256=56a8e94dbfccc19574fec9eff05c1a1b462e382d8c95991013268c0032bbf720
+  sorbet-static (0.6.12904-x86_64-linux) sha256=2ffffff1cc86dcce9c56909b72d1b141795b7dbd0e6f6befc7e9f0b87ec5da34
   stringio (3.2.0) sha256=c37cb2e58b4ffbd33fe5cd948c05934af997b36e0b6ca6fdf43afa234cf222e1
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f
   unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
