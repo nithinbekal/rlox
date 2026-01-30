@@ -1,29 +1,43 @@
 # frozen_string_literal: true
+# typed: true
 
 module Rlox
   class AstPrinter
+    include AstVisitor
+
+    #: (Array[Expr] statements) -> String
     def print(statements)
       statements.map { |statement| statement.accept(self) }.join("\n")
     end
 
-    def visit_binary(expr)
-      "#{expr.operator} #{expr.left.accept(self)} #{expr.right.accept(self)}"
+    # @override
+    #: (Binary binary) -> String
+    def visit_binary(binary)
+      "#{binary.operator} #{binary.left.accept(self)} #{binary.right.accept(self)}"
     end
 
-    def visit_grouping(expr)
-      "(#{expr.expression.accept(self)})"
+    # @override
+    #: (Grouping grouping) -> String
+    def visit_grouping(grouping)
+      "(#{grouping.expression.accept(self)})"
     end
 
-    def visit_literal(expr)
-      expr.value.to_s
+    # @override
+    #: (Literal literal) -> String
+    def visit_literal(literal)
+      literal.value.to_s
     end
 
-    def visit_unary(expr)
-      "#{expr.operator}#{expr.right.accept(self)}"
+    # @override
+    #: (Unary unary) -> String
+    def visit_unary(unary)
+      "#{unary.operator}#{unary.right.accept(self)}"
     end
 
-    def visit_operator(expr)
-      "#{expr.left.accept(self)} #{expr.operator} #{expr.right.accept(self)}"
+    # @override
+    #: (Operator operator) -> String
+    def visit_operator(operator)
+      "#{operator.left.accept(self)} #{operator.operator} #{operator.right.accept(self)}"
     end
   end
 end
