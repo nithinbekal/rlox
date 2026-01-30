@@ -15,6 +15,9 @@ Lint/MissingSuper:
 Metrics/AbcSize:
   Enabled: false
 
+Metrics/ClassLength:
+  Enabled: false
+
 Metrics/CyclomaticComplexity:
   Enabled: false
 
