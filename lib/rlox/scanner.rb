@@ -82,14 +82,14 @@ module Rlox
     #: -> bool
     def at_end? = @current >= @source.length
 
-    #: -> String
+    #: -> String?
     def peek
-      @source[@current] #: as !nil
+      @source[@current]
     end
 
-    #: -> String
+    #: -> String?
     def peek_next
-      @source[@current + 1] #: as !nil
+      @source[@current + 1]
     end
 
     #: (String c) -> bool
@@ -129,7 +129,7 @@ module Rlox
     def number_literal
       advance while peek&.match?(/\d/)
 
-      if peek == "." && peek_next.match?(/\d/)
+      if peek == "." && peek_next&.match?(/\d/)
         advance
         advance while peek&.match?(/\d/)
       end
@@ -140,7 +140,7 @@ module Rlox
 
     #: -> void
     def identifier
-      advance while peek.match?(/\w/)
+      advance while peek&.match?(/\w/)
 
       text = @source[@start..(@current - 1)]
       type = KEYWORDS[text] || :IDENTIFIER
