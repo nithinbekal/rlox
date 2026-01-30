@@ -127,11 +127,11 @@ module Rlox
 
     #: -> void
     def number_literal
-      advance while peek.match?(/\d/)
+      advance while peek&.match?(/\d/)
 
       if peek == "." && peek_next.match?(/\d/)
         advance
-        advance while peek.match?(/\d/)
+        advance while peek&.match?(/\d/)
       end
 
       text = @source[@start..(@current - 1)]
