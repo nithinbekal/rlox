@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# typed: true
 
 module Rlox
   # Scanner class for Lox
@@ -22,7 +23,7 @@ module Rlox
       "while" => :WHILE,
     }.freeze
 
-    #: (source String) -> void
+    #: (String source) -> void
     def initialize(source)
       @source = source
       @tokens = []
@@ -75,19 +76,19 @@ module Rlox
     def advance
       c = @source[@current]
       @current += 1
-      c
+      c #: as String
     end
 
     #: -> bool
     def at_end? = @current >= @source.length
 
     #: -> String
-    def peek = @source[@current]
+    def peek = T.must(@source[@current])
 
     #: -> String
-    def peek_next = @source[@current + 1]
+    def peek_next = T.must(@source[@current + 1])
 
-    #: (c String) -> bool
+    #: (String c) -> bool
     def match?(c)
       return false if at_end?
       return false if peek != c
@@ -97,7 +98,7 @@ module Rlox
       true
     end
 
-    #: (type Symbol) -> void
+    #: (Symbol type) -> void
     def add_token(type)
       text = @source[@start..(@current - 1)]
       @tokens << Token.new(type, text, nil, @line)
@@ -122,11 +123,11 @@ module Rlox
 
     #: -> void
     def number_literal
-      advance while peek&.match?(/\d/)
+      advance while peek.match?(/\d/)
 
-      if peek == "." && peek_next&.match?(/\d/)
+      if peek == "." && peek_next.match?(/\d/)
         advance
-        advance while peek&.match?(/\d/)
+        advance while peek.match?(/\d/)
       end
 
       text = @source[@start..(@current - 1)]
@@ -135,7 +136,7 @@ module Rlox
 
     #: -> void
     def identifier
-      advance while peek&.match?(/\w/)
+      advance while peek.match?(/\w/)
 
       text = @source[@start..(@current - 1)]
       type = KEYWORDS[text] || :IDENTIFIER

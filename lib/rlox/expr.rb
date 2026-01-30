@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+# typed: true
 
 module Rlox
-  #: @abstract
+  # @abstract
   class Expr
     def accept(visitor)
       raise NotImplementedError, "Subclasses must implement this method"
@@ -9,105 +10,131 @@ module Rlox
   end
 
   class Binary < Expr
-    #: (left Expr, operator Symbol, right Expr) -> void
+    #: (Expr, Symbol, Expr) -> void
     def initialize(left, operator, right)
       @left = left
       @operator = operator
       @right = right
     end
 
-    attr_reader :left #: Expr
-    attr_reader :operator #: Symbol
-    attr_reader :right #: Expr
+    #: Expr
+    attr_reader :left
+
+    #: Symbol
+    attr_reader :operator
+
+    #: Expr
+    attr_reader :right
 
     def accept(visitor)
       visitor.visit_binary(self)
     end
 
-    #: (other Object) -> bool
+    #: (Object other) -> bool
     def ==(other)
-      other.is_a?(Binary) &&
-        @left == other.left &&
-        @operator == other.operator &&
-        @right == other.right
+      return false unless other.is_a?(Binary)
+
+      binary = other #: as Binary
+
+      @left == binary.left &&
+        @operator == binary.operator &&
+        @right == binary.right
     end
   end
 
   class Grouping < Expr
-    #: (expression Expr) -> void
+    #: (Expr) -> void
     def initialize(expression)
       @expression = expression
     end
 
-    attr_reader :expression #: Expr
+    #: Expr
+    attr_reader :expression
 
     def accept(visitor)
       visitor.visit_grouping(self)
     end
 
-    #: (other Object) -> bool
+    #: (Object) -> bool
     def ==(other)
       other.is_a?(Grouping) && @expression == other.expression
     end
   end
 
   class Literal < Expr
-    #: (value Object) -> void
+    #: (Object) -> void
     def initialize(value)
       @value = value
     end
 
-    attr_reader :value #: Object
+    #: Object
+    attr_reader :value
 
     def accept(visitor)
       visitor.visit_literal(self)
     end
 
-    #: (other Object) -> bool
+    #: (Object) -> bool
     def ==(other)
-      other.is_a?(Literal) && @value == other.value
+      return false unless other.is_a?(Literal)
+
+      literal = other #: as Literal
+
+      @value == literal.value
     end
   end
 
   class Unary < Expr
-    #: (operator Symbol, right Expr) -> void
+    #: (Symbol, Expr) -> void
     def initialize(operator, right)
       @operator = operator
       @right = right
     end
 
-    attr_reader :operator #: Symbol
-    attr_reader :right #: Expr
+    #: Symbol
+    attr_reader :operator
+
+    #: Expr
+    attr_reader :right
 
     def accept(visitor)
       visitor.visit_unary(self)
     end
 
-    #: (other Object) -> bool
+    #: (Object) -> bool
     def ==(other)
       other.is_a?(Unary) && @operator == other.operator && @right == other.right
     end
   end
 
   class Operator < Expr
-    #: (left Expr, operator Symbol, right Expr) -> void
+    #: (Expr, Symbol, Expr) -> void
     def initialize(left, operator, right)
       @left = left
       @operator = operator
       @right = right
     end
 
-    attr_reader :left #: Expr
-    attr_reader :operator #: Symbol
-    attr_reader :right #: Expr
+    #: Expr
+    attr_reader :left
+
+    #: Symbol
+    attr_reader :operator
+
+    #: Expr
+    attr_reader :right
 
     def accept(visitor)
       visitor.visit_operator(self)
     end
 
-    #: (other Object) -> bool
+    #: (Object) -> bool
     def ==(other)
-      other.is_a?(Operator) && @left == other.left && @operator == other.operator && @right == other.right
+      return false unless other.is_a?(Operator)
+
+      operator = other #: as Operator
+
+      @left == operator.left && @operator == operator.operator && @right == operator.right
     end
   end
 end
