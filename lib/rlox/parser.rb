@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+# typed: true
 
 module Rlox
   # A recursive descent parser for the Lox programming language.
   class Parser
-    #: (tokens Array[Token]) -> void
+    #: (Array[Token] tokens) -> void
     def initialize(tokens)
       @tokens = tokens
       @current = 0
@@ -16,8 +17,11 @@ module Rlox
 
     private
 
-    attr_reader :tokens #: Array[Token]
-    attr_reader :current #: Integer
+    #: Array[Token]
+    attr_reader :tokens
+
+    #: Integer
+    attr_reader :current
 
     # BNF: expression → equality
     #
@@ -116,7 +120,7 @@ module Rlox
         return Unary.new(operator, right)
       end
 
-      primary
+      primary #: as !nil
     end
 
     # primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
@@ -155,7 +159,7 @@ module Rlox
       end
     end
 
-    #: (*types Symbol) -> bool
+    #: (*Symbol) -> bool
     def match?(*types)
       types.any? do |type|
         if peek.type == type
@@ -167,17 +171,26 @@ module Rlox
       false
     end
 
+    #: -> void
+    def advance
+      @current += 1
+    end
+
     #: -> Token
-    def previous = @tokens[@current - 1]
+    def previous
+      @tokens[@current - 1] #: as !nil
+    end
 
     #: -> Token
     def peek
-      return @tokens[@current] if @current < @tokens.length
+      if @current < @tokens.length
+        return @tokens[@current] #: as !nil
+      end
 
-      @tokens[-1]
+      @tokens[-1] #: as !nil
     end
 
-    #: (type Symbol, message String) -> Token
+    #: (Symbol type, String message) -> void
     def consume(type, message)
       return previous if match?(type)
 
