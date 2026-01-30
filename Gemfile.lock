@@ -109,7 +109,6 @@ DEPENDENCIES
   rlox!
   rubocop (~> 1.21)
   sorbet
-  sorbet-runtime
   tapioca
 
 CHECKSUMS
