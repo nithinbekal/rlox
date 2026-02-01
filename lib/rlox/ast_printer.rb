@@ -2,9 +2,7 @@
 # typed: true
 
 module Rlox
-  class AstPrinter
-    include AstVisitor
-
+  class AstPrinter < AstVisitor
     #: (Array[Expr] statements) -> String
     def print(statements)
       statements.map { |statement| statement.accept(self) }.join("\n")

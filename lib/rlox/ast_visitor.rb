@@ -2,10 +2,8 @@
 # typed: true
 
 module Rlox
-  # @interface
-  module AstVisitor
-    include Kernel
-
+  # @abstract
+  class AstVisitor
     # @abstract
     #: (Binary binary) -> Object
     def visit_binary(binary)
