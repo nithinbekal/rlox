@@ -2,38 +2,39 @@
 # typed: true
 
 module Rlox
+  #: [ReturnType = String]
   class AstPrinter < AstVisitor
-    #: (Array[Expr] statements) -> String
+    #: (Array[Expr] statements) -> ReturnType
     def print(statements)
       statements.map { |statement| statement.accept(self) }.join("\n")
     end
 
     # @override
-    #: (Binary binary) -> String
+    #: (Binary binary) -> ReturnType
     def visit_binary(binary)
       "#{binary.operator} #{binary.left.accept(self)} #{binary.right.accept(self)}"
     end
 
     # @override
-    #: (Grouping grouping) -> String
+    #: (Grouping grouping) -> ReturnType
     def visit_grouping(grouping)
       "(#{grouping.expression.accept(self)})"
     end
 
     # @override
-    #: (Literal literal) -> String
+    #: (Literal literal) -> ReturnType
     def visit_literal(literal)
       literal.value.to_s
     end
 
     # @override
-    #: (Unary unary) -> String
+    #: (Unary unary) -> ReturnType
     def visit_unary(unary)
       "#{unary.operator}#{unary.right.accept(self)}"
     end
 
     # @override
-    #: (Operator operator) -> String
+    #: (Operator operator) -> ReturnType
     def visit_operator(operator)
       "#{operator.left.accept(self)} #{operator.operator} #{operator.right.accept(self)}"
     end
