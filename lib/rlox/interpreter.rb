@@ -23,11 +23,11 @@ module Rlox
     # @override
     #: (Unary unary) -> ReturnType
     def visit_unary(unary)
-      right = evaluate(unary.right)
+      value = evaluate(unary.right)
 
       case unary.operator
-      when :- then -right.value
-      when :! then !right.value
+      when :MINUS then -value
+      when :BANG then !value
       end
     end
 
