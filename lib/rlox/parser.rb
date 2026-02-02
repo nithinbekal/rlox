@@ -59,7 +59,7 @@ module Rlox
     def comparison
       expression = term
 
-      while match?(:LESS, :LESS_EQUAL, :GREATER, :GREATER_EQUAL)
+      while match?(:LESS, :LESS_EQUAL, :GREATER, :GREATER_EQUAL, :NOT_EQUAL)
         operator = previous.type
         right = term
         expression = Binary.new(expression, operator, right)
