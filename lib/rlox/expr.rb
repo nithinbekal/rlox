@@ -99,31 +99,4 @@ module Rlox
       other.is_a?(Unary) && @operator == other.operator && @right == other.right
     end
   end
-
-  class Operator < Expr
-    #: (Expr left, Symbol operator, Expr right) -> void
-    def initialize(left, operator, right)
-      @left = left
-      @operator = operator
-      @right = right
-    end
-
-    #: Expr
-    attr_reader :left
-
-    #: Symbol
-    attr_reader :operator
-
-    #: Expr
-    attr_reader :right
-
-    def accept(visitor)
-      visitor.visit_operator(self)
-    end
-
-    #: (Object other) -> bool
-    def ==(other)
-      other.is_a?(Operator) && @left == other.left && @operator == other.operator && @right == other.right
-    end
-  end
 end

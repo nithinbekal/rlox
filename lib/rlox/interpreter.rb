@@ -50,23 +50,5 @@ module Rlox
       when :GREATER_EQUAL then left >= right
       end
     end
-
-    # @override
-    #: (Operator operator) -> ReturnType
-    def visit_operator(operator)
-      left = operator.left.accept(self).value
-      right = operator.right.accept(self).value
-
-      binding.irb
-
-      case binary.operator
-      when :EQUAL_EQUAL then left == right
-      when :NOT_EQUAL then left != right
-      when :LESS then left < right
-      when :LESS_EQUAL then left <= right
-      when :GREATER then left > right
-      when :GREATER_EQUAL then left >= right
-      end
-    end
   end
 end

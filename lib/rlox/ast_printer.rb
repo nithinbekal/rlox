@@ -32,11 +32,5 @@ module Rlox
     def visit_unary(unary)
       "#{unary.operator}#{unary.right.accept(self)}"
     end
-
-    # @override
-    #: (Operator operator) -> ReturnType
-    def visit_operator(operator)
-      "#{operator.left.accept(self)} #{operator.operator} #{operator.right.accept(self)}"
-    end
   end
 end

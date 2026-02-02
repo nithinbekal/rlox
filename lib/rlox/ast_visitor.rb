@@ -28,11 +28,5 @@ module Rlox
     def visit_unary(unary)
       raise NotImplementedError, "Subclasses must implement this method"
     end
-
-    # @abstract
-    #: (Operator operator) -> ReturnType
-    def visit_operator(operator)
-      raise NotImplementedError, "Subclasses must implement this method"
-    end
   end
 end
