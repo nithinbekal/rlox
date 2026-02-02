@@ -26,12 +26,12 @@ def run(source)
   scanner = Rlox::Scanner.new(source)
   tokens = scanner.scan_tokens
   parser = Rlox::Parser.new(tokens)
-  expression = parser.parse
+  expressions = parser.parse
 
-  return if expression.nil?
+  return if expressions.nil?
 
-  printer = Rlox::AstPrinter.new
-  puts printer.print(expression)
+  interpreter = Rlox::Interpreter.new
+  puts interpreter.evaluate(expressions.first)
 end
 
 run_prompt
