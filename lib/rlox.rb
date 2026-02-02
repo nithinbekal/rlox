@@ -7,6 +7,7 @@ require_relative "rlox/expr"
 require_relative "rlox/ast_visitor"
 require_relative "rlox/ast_printer"
 require_relative "rlox/parser"
+require_relative "rlox/interpreter"
 
 module Rlox
   class Error < StandardError; end

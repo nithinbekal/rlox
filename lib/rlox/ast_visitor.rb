@@ -3,7 +3,7 @@
 
 module Rlox
   # @abstract
-  #: [ReturnType]
+  #: [ReturnType < Object]
   class AstVisitor
     # @abstract
     #: (Binary binary) -> ReturnType
