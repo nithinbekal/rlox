@@ -3,35 +3,5 @@
 
 require_relative "../lib/rlox"
 
-def run_prompt
-  puts "Lox REPL - Press Ctrl+C or Ctrl+D to exit"
-
-  loop do
-    print "> "
-    line = gets
-    break if line.nil?
-
-    line = line.chomp
-    next if line.empty?
-
-    run(line)
-  rescue StandardError => e
-    puts "Error: #{e.message}"
-  end
-rescue Interrupt
-  puts "\nBye!"
-end
-
-def run(source)
-  scanner = Rlox::Scanner.new(source)
-  tokens = scanner.scan_tokens
-  parser = Rlox::Parser.new(tokens)
-  expressions = parser.parse
-
-  return if expressions.nil?
-
-  interpreter = Rlox::Interpreter.new
-  puts interpreter.evaluate(expressions.first)
-end
-
-run_prompt
+runner = Rlox::Runner.new
+runner.run_prompt
