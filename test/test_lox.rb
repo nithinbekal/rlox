@@ -10,7 +10,7 @@ module Rlox
 
     def test_arithmetic_expressions
       assert_equal 3, Rlox.run("1 + 2")
-      assert_equal -1, Rlox.run("1 - 2")
+      assert_equal(-1, Rlox.run("1 - 2"))
       assert_equal 2, Rlox.run("1 * 2")
       assert_equal 0.5, Rlox.run("1 / 2")
     end
@@ -38,7 +38,7 @@ module Rlox
     end
 
     def test_unary_expressions
-      assert_equal -1, Rlox.run("-1")
+      assert_equal(-1, Rlox.run("-1"))
       assert_equal true, Rlox.run("!false")
       assert_equal false, Rlox.run("!true")
       assert_equal true, Rlox.run("!nil")
