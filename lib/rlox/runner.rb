@@ -37,22 +37,32 @@ module Rlox
       scanner = Rlox::Scanner.new(source)
       tokens = scanner.scan_tokens
       parser = Rlox::Parser.new(tokens)
-      expression = parser.parse
+      statements = parser.parse
 
-      printer = Rlox::AstPrinter.new
-      printer.print(expression)
+      interpreter = Rlox::Interpreter.new
+      statements.each { |stmt| interpreter.execute(stmt) }
     end
 
     def evaluate(source)
       scanner = Rlox::Scanner.new(source)
       tokens = scanner.scan_tokens
       parser = Rlox::Parser.new(tokens)
-      expressions = parser.parse
+      statements = parser.parse
 
-      return if expressions.nil?
+      return if statements.empty?
 
       interpreter = Rlox::Interpreter.new
-      interpreter.evaluate(expressions.first)
+
+      statements.each do |stmt|
+        if stmt.is_a?(Rlox::Expression)
+          result = interpreter.evaluate(stmt.expression)
+          return interpreter.send(:stringify, result)
+        else
+          interpreter.execute(stmt)
+        end
+      end
+
+      nil
     end
   end
 end
