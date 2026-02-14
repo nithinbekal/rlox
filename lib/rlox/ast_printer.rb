@@ -32,5 +32,17 @@ module Rlox
     def visit_unary(unary)
       "#{unary.operator}#{unary.right.accept(self)}"
     end
+
+    # @override
+    #: (Expression stmt) -> ReturnType
+    def visit_expression(stmt)
+      stmt.expression.accept(self)
+    end
+
+    # @override
+    #: (Print stmt) -> ReturnType
+    def visit_print(stmt)
+      "print #{stmt.expression.accept(self)}"
+    end
   end
 end

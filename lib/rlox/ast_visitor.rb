@@ -28,5 +28,17 @@ module Rlox
     def visit_unary(unary)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Expression stmt) -> void
+    def visit_expression(stmt)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
+
+    # @abstract
+    #: (Print stmt) -> void
+    def visit_print(stmt)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end
