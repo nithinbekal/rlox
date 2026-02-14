@@ -19,11 +19,19 @@ module Rlox
     scanner = Rlox::Scanner.new(source)
     tokens = scanner.scan_tokens
     parser = Rlox::Parser.new(tokens)
-    expressions = parser.parse
+    statements = parser.parse
 
-    return if expressions.nil?
+    return if statements.nil? || statements.empty?
 
     interpreter = Rlox::Interpreter.new
-    interpreter.evaluate(expressions.first)
+
+    # For backward compatibility with tests: if there's only one expression statement,
+    # return its value. Otherwise, execute all statements and return nil.
+    if statements.length == 1 && statements.first.is_a?(Expression)
+      interpreter.evaluate(statements.first.expression)
+    else
+      statements.each { |stmt| interpreter.execute(stmt) }
+      nil
+    end
   end
 end
