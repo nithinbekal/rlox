@@ -10,9 +10,11 @@ module Rlox
       @current = 0
     end
 
-    #: -> Array[Expr]
+    #: -> Array[Statement]
     def parse
-      [expression]
+      statements = []
+      statements << declaration until at_end?
+      statements
     end
 
     private
@@ -22,6 +24,34 @@ module Rlox
 
     #: Integer
     attr_reader :current
+
+    #: -> Statement
+    def declaration
+      statement
+    end
+
+    #: -> Statement
+    def statement
+      if match?(:PRINT)
+        print_statement
+      else
+        expression_statement
+      end
+    end
+
+    #: -> Statement
+    def print_statement
+      value = expression
+      consume(:SEMICOLON, "Expected ';' after expression")
+      Print.new(value)
+    end
+
+    #: -> Statement
+    def expression_statement
+      expr = expression
+      consume(:SEMICOLON, "Expected ';' after expression")
+      Expression.new(expr)
+    end
 
     # BNF: expression → equality
     #

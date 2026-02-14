@@ -8,6 +8,27 @@ module Rlox
       expression.accept(self)
     end
 
+    def execute(statement)
+      statement.accept(self)
+    end
+
+    # Statement visitors
+    # @override
+    #: (Expression stmt) -> void
+    def visit_expression(stmt)
+      evaluate(stmt.expression)
+      nil
+    end
+
+    # @override
+    #: (Print stmt) -> void
+    def visit_print(stmt)
+      value = evaluate(stmt.expression)
+      puts stringify(value)
+      nil
+    end
+
+    # Expression visitors
     # @override
     #: (Literal literal) -> ReturnType
     def visit_literal(literal)
@@ -48,6 +69,20 @@ module Rlox
       when :LESS_EQUAL then left <= right
       when :GREATER then left > right
       when :GREATER_EQUAL then left >= right
+      end
+    end
+
+    private
+
+    #: (Object) -> String
+    def stringify(value)
+      return "nil" if value.nil?
+
+      # For numeric values, remove trailing .0 for integers
+      if value.is_a?(Numeric) && value == value.to_i
+        value.to_i.to_s
+      else
+        value.to_s
       end
     end
   end
