@@ -101,12 +101,12 @@ module Rlox
   end
 
   class Variable < Expr
-    #: (String name) -> void
+    #: (Token name) -> void
     def initialize(name)
       @name = name
     end
 
-    #: String
+    #: Token
     attr_reader :name
 
     def accept(visitor)
