@@ -3,6 +3,10 @@
 
 module Rlox
   class Runner
+    def initialize
+      @interpreter = Rlox::Interpreter.new
+    end
+
     def run_file(path)
       source = File.read(path)
       run_source(source)
@@ -39,8 +43,7 @@ module Rlox
       parser = Rlox::Parser.new(tokens)
       statements = parser.parse
 
-      interpreter = Rlox::Interpreter.new
-      statements.each { |stmt| interpreter.execute(stmt) }
+      statements.each { |stmt| @interpreter.execute(stmt) }
     end
 
     def evaluate(source)
@@ -51,14 +54,12 @@ module Rlox
 
       return if statements.empty?
 
-      interpreter = Rlox::Interpreter.new
-
       statements.each do |stmt|
         if stmt.is_a?(Rlox::Expression)
-          result = interpreter.evaluate(stmt.expression)
-          return interpreter.send(:stringify, result)
+          result = @interpreter.evaluate(stmt.expression)
+          return @interpreter.send(:stringify, result)
         else
-          interpreter.execute(stmt)
+          @interpreter.execute(stmt)
         end
       end
 
