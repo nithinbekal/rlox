@@ -40,5 +40,17 @@ module Rlox
     def visit_print(stmt)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Var var_stmt) -> void
+    def visit_var(var_stmt)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
+
+    # @abstract
+    #: (Variable variable) -> ReturnType
+    def visit_variable(variable)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end

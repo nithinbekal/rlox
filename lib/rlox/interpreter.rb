@@ -4,6 +4,10 @@
 module Rlox
   #: [ReturnType = Object]
   class Interpreter < AstVisitor
+    def initialize
+      @environment = Environment.new
+    end
+
     def evaluate(expression)
       expression.accept(self)
     end
@@ -25,6 +29,16 @@ module Rlox
     def visit_print(stmt)
       value = evaluate(stmt.expression)
       puts stringify(value)
+      nil
+    end
+
+    # @override
+    #: (Var stmt) -> void
+    def visit_var(stmt)
+      value = nil
+      value = evaluate(stmt.initializer) if stmt.initializer
+
+      @environment.define(stmt.name.lexeme, value)
       nil
     end
 
@@ -70,6 +84,12 @@ module Rlox
       when :GREATER then left > right
       when :GREATER_EQUAL then left >= right
       end
+    end
+
+    # @override
+    #: (Variable variable) -> ReturnType
+    def visit_variable(variable)
+      @environment.get(variable.name.lexeme)
     end
 
     private

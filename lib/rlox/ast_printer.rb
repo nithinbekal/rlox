@@ -44,5 +44,18 @@ module Rlox
     def visit_print(stmt)
       "print #{stmt.expression.accept(self)}"
     end
+
+    # @override
+    #: (Var var_stmt) -> ReturnType
+    def visit_var(var_stmt)
+      initializer = var_stmt.initializer ? " = #{var_stmt.initializer.accept(self)}" : ""
+      "var #{var_stmt.name.lexeme}#{initializer}"
+    end
+
+    # @override
+    #: (Variable variable) -> ReturnType
+    def visit_variable(variable)
+      variable.name.lexeme
+    end
   end
 end
