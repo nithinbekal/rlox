@@ -182,7 +182,7 @@ module Rlox
       return Literal.new(true) if match?(:TRUE)
       return Literal.new(nil) if match?(:NIL)
       return Literal.new(previous.literal) if match?(:NUMBER, :STRING)
-      return Variable.new(previous.literal) if match?(:IDENTIFIER)
+      return Variable.new(previous) if match?(:IDENTIFIER)
 
       return unless match?(:LEFT_PAREN)
 
