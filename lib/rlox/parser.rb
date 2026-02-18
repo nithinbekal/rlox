@@ -27,7 +27,20 @@ module Rlox
 
     #: -> Statement
     def declaration
-      statement
+      if match?(:VAR)
+        var_declaration
+      else
+        statement
+      end
+    end
+
+    #: -> Statement
+    def var_declaration
+      name = consume(:IDENTIFIER, "Expected variable name")
+      initializer = expression if match?(:EQUAL)
+
+      consume(:SEMICOLON, "Expected ';' after variable declaration")
+      Var.new(name, initializer)
     end
 
     #: -> Statement
@@ -169,6 +182,7 @@ module Rlox
       return Literal.new(true) if match?(:TRUE)
       return Literal.new(nil) if match?(:NIL)
       return Literal.new(previous.literal) if match?(:NUMBER, :STRING)
+      return Variable.new(previous.literal) if match?(:IDENTIFIER)
 
       return unless match?(:LEFT_PAREN)
 

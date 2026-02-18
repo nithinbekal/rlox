@@ -99,4 +99,18 @@ module Rlox
       other.is_a?(Unary) && @operator == other.operator && @right == other.right
     end
   end
+
+  class Variable < Expr
+    #: (String name) -> void
+    def initialize(name)
+      @name = name
+    end
+
+    #: String
+    attr_reader :name
+
+    def accept(visitor)
+      visitor.visit_variable(self)
+    end
+  end
 end
