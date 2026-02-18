@@ -3,8 +3,8 @@
 
 module Rlox
   class Environment
-    #: (String name, Object value) -> void
-    def initialize(name, value)
+    #: -> void
+    def initialize
       @values = {}
     end
 
