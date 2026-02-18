@@ -53,5 +53,57 @@ module Rlox
       output = capture_io { Rlox.run("print 1; print 2;") }
       assert_equal "1\n2\n", output[0]
     end
+
+    def test_var_declaration_with_initializer
+      output = capture_io { Rlox.run("var a = 42; print a;") }
+      assert_equal "42\n", output[0]
+    end
+
+    def test_var_declaration_without_initializer
+      output = capture_io { Rlox.run("var x; print x;") }
+      assert_equal "nil\n", output[0]
+    end
+
+    def test_var_declaration_with_string
+      output = capture_io { Rlox.run('var name = "Alice"; print name;') }
+      assert_equal "Alice\n", output[0]
+    end
+
+    def test_multiple_var_declarations
+      output = capture_io { Rlox.run("var a = 1; var b = 2; print a + b;") }
+      assert_equal "3\n", output[0]
+    end
+
+    def test_var_with_expression_initializer
+      output = capture_io { Rlox.run("var sum = 1 + 2 * 3; print sum;") }
+      assert_equal "7\n", output[0]
+    end
+
+    def test_var_redeclaration
+      output = capture_io { Rlox.run("var a = 1; print a; var a = 2; print a;") }
+      assert_equal "1\n2\n", output[0]
+    end
+
+    def test_undefined_variable_error
+      error = assert_raises(RuntimeError) do
+        Rlox.run("print x;")
+      end
+      assert_equal "Undefined variable 'x'.", error.message
+    end
+
+    def test_var_in_expression
+      output = capture_io { Rlox.run("var a = 5; var b = 3; print a * b + 2;") }
+      assert_equal "17\n", output[0]
+    end
+
+    def test_var_with_variable_initializer
+      output = capture_io { Rlox.run("var a = 10; var b = a; print b;") }
+      assert_equal "10\n", output[0]
+    end
+
+    def test_var_with_boolean
+      output = capture_io { Rlox.run("var flag = true; print flag;") }
+      assert_equal "true\n", output[0]
+    end
   end
 end

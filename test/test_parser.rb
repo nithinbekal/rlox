@@ -169,5 +169,183 @@ module Rlox
 
       assert_equal 0, statements.length
     end
+
+    def test_parse_var_declaration_with_initializer
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "42", 42, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Var, statements[0]
+      assert_equal "a", statements[0].name.lexeme
+      assert_instance_of Literal, statements[0].initializer
+      assert_equal 42, statements[0].initializer.value
+    end
+
+    def test_parse_var_declaration_without_initializer
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "x", "x", 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Var, statements[0]
+      assert_equal "x", statements[0].name.lexeme
+      assert_nil statements[0].initializer
+    end
+
+    def test_parse_var_declaration_with_expression_initializer
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "sum", "sum", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:PLUS, "+", nil, 1),
+        Token.new(:NUMBER, "2", 2, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Var, statements[0]
+      assert_equal "sum", statements[0].name.lexeme
+      assert_instance_of Binary, statements[0].initializer
+      assert_equal :PLUS, statements[0].initializer.operator
+    end
+
+    def test_parse_multiple_var_declarations
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "b", "b", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "2", 2, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 2, statements.length
+      assert_instance_of Var, statements[0]
+      assert_instance_of Var, statements[1]
+      assert_equal "a", statements[0].name.lexeme
+      assert_equal "b", statements[1].name.lexeme
+    end
+
+    def test_parse_var_declaration_missing_semicolon
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      error = assert_raises(ParserError) { parser.parse }
+      assert_equal "Expected ';' after variable declaration", error.message
+    end
+
+    def test_parse_var_declaration_missing_name
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      error = assert_raises(ParserError) { parser.parse }
+      assert_equal "Expected variable name", error.message
+    end
+
+    # Tests for variable expressions
+    def test_parse_variable_expression
+      tokens = [
+        Token.new(:IDENTIFIER, "myVar", "myVar", 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Expression, statements[0]
+      assert_instance_of Variable, statements[0].expression
+      assert_equal "myVar", statements[0].expression.name.lexeme
+    end
+
+    def test_parse_variable_in_binary_expression
+      tokens = [
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:PLUS, "+", nil, 1),
+        Token.new(:IDENTIFIER, "b", "b", 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Expression, statements[0]
+      assert_instance_of Binary, statements[0].expression
+      assert_instance_of Variable, statements[0].expression.left
+      assert_instance_of Variable, statements[0].expression.right
+      assert_equal "a", statements[0].expression.left.name.lexeme
+      assert_equal "b", statements[0].expression.right.name.lexeme
+    end
+
+    def test_parse_print_variable
+      tokens = [
+        Token.new(:PRINT, "print", nil, 1),
+        Token.new(:IDENTIFIER, "x", "x", 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Print, statements[0]
+      assert_instance_of Variable, statements[0].expression
+      assert_equal "x", statements[0].expression.name.lexeme
+    end
+
+    def test_parse_mixed_var_and_other_statements
+      tokens = [
+        Token.new(:VAR, "var", nil, 1),
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:PRINT, "print", nil, 1),
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 2, statements.length
+      assert_instance_of Var, statements[0]
+      assert_instance_of Print, statements[1]
+    end
   end
 end
