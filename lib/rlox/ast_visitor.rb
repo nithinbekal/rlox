@@ -52,5 +52,11 @@ module Rlox
     def visit_variable(variable)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Assign assign) -> ReturnType
+    def visit_assign(assign)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end

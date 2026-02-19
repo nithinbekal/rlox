@@ -105,5 +105,34 @@ module Rlox
       output = capture_io { Rlox.run("var flag = true; print flag;") }
       assert_equal "true\n", output[0]
     end
+
+    def test_assignment_updates_variable
+      output = capture_io { Rlox.run("var a = 1; a = 2; print a;") }
+      assert_equal "2\n", output[0]
+    end
+
+    def test_assignment_returns_value
+      output = capture_io { Rlox.run("var a; print a = 42;") }
+      assert_equal "42\n", output[0]
+    end
+
+    def test_chained_assignment
+      output = capture_io { Rlox.run("var a; var b; a = b = 5; print a; print b;") }
+      assert_equal "5\n5\n", output[0]
+    end
+
+    def test_assignment_to_undefined_variable
+      error = assert_raises(RuntimeError) { Rlox.run("a = 1;") }
+      assert_equal "Undefined variable 'a'.", error.message
+    end
+
+    def test_invalid_assignment_target
+      assert_raises(ParserError) { Rlox.run("1 = 2;") }
+    end
+
+    def test_assignment_with_expression_rhs
+      output = capture_io { Rlox.run("var x = 1; x = x + 10; print x;") }
+      assert_equal "11\n", output[0]
+    end
   end
 end

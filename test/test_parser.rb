@@ -347,5 +347,101 @@ module Rlox
       assert_instance_of Var, statements[0]
       assert_instance_of Print, statements[1]
     end
+
+    # Tests for assignment expressions
+    def test_parse_assignment_to_variable
+      tokens = [
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Expression, statements[0]
+      assert_instance_of Assign, statements[0].expression
+      assert_equal "a", statements[0].expression.name.lexeme
+      assert_instance_of Literal, statements[0].expression.value
+      assert_equal 1, statements[0].expression.value.value
+    end
+
+    def test_parse_assignment_with_variable_rhs
+      tokens = [
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:IDENTIFIER, "b", "b", 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Assign, statements[0].expression
+      assert_equal "a", statements[0].expression.name.lexeme
+      assert_instance_of Variable, statements[0].expression.value
+      assert_equal "b", statements[0].expression.value.name.lexeme
+    end
+
+    def test_parse_assignment_with_expression_rhs
+      tokens = [
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:PLUS, "+", nil, 1),
+        Token.new(:NUMBER, "2", 2, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      assert_instance_of Assign, statements[0].expression
+      assert_equal "a", statements[0].expression.name.lexeme
+      assert_instance_of Binary, statements[0].expression.value
+      assert_equal :PLUS, statements[0].expression.value.operator
+    end
+
+    def test_parse_chained_assignment
+      # a = b = 1 is right-associative: a = (b = 1)
+      tokens = [
+        Token.new(:IDENTIFIER, "a", "a", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:IDENTIFIER, "b", "b", 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      statements = parser.parse
+
+      assert_equal 1, statements.length
+      outer = statements[0].expression
+      assert_instance_of Assign, outer
+      assert_equal "a", outer.name.lexeme
+      inner = outer.value
+      assert_instance_of Assign, inner
+      assert_equal "b", inner.name.lexeme
+      assert_instance_of Literal, inner.value
+      assert_equal 1, inner.value.value
+    end
+
+    def test_parse_invalid_assignment_target
+      tokens = [
+        Token.new(:NUMBER, "1", 1, 1),
+        Token.new(:EQUAL, "=", nil, 1),
+        Token.new(:NUMBER, "2", 2, 1),
+        Token.new(:SEMICOLON, ";", nil, 1),
+        Token.new(:EOF, "", nil, 1),
+      ]
+      parser = Parser.new(tokens)
+      error = assert_raises(ParserError) { parser.parse }
+      assert_equal "Invalid assignment target.", error.message
+    end
   end
 end

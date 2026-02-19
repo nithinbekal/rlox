@@ -42,6 +42,14 @@ module Rlox
       nil
     end
 
+    # @override
+    #: (Assign expr) -> Object
+    def visit_assign(expr)
+      value = evaluate(expr.value)
+      @environment.assign(expr.name.lexeme, value)
+      value
+    end
+
     # Expression visitors
     # @override
     #: (Literal literal) -> ReturnType
@@ -90,6 +98,14 @@ module Rlox
     #: (Variable variable) -> ReturnType
     def visit_variable(variable)
       @environment.get(variable.name.lexeme)
+    end
+
+    # @override
+    #: (Assign assign) -> ReturnType
+    def visit_assign(assign)
+      value = evaluate(assign.value)
+      @environment.assign(assign.name.lexeme, value)
+      value
     end
 
     private

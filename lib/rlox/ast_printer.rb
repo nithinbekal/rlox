@@ -57,5 +57,11 @@ module Rlox
     def visit_variable(variable)
       variable.name.lexeme
     end
+
+    # @override
+    #: (Assign assign) -> ReturnType
+    def visit_assign(assign)
+      "#{assign.name.lexeme} = #{assign.value.accept(self)}"
+    end
   end
 end

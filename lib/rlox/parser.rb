@@ -70,7 +70,22 @@ module Rlox
     #
     #: -> Expr
     def expression
-      equality
+      assignment
+    end
+
+    # BNF: assignment → variable "=" assignment | equality
+    #
+    #: -> Expr
+    def assignment
+      expr = equality
+      return expr unless match?(:EQUAL)
+
+      previous
+      value = assignment
+
+      raise ParserError, "Invalid assignment target." unless expr.is_a?(Variable)
+
+      Assign.new(expr.name, value)
     end
 
     # BNF: equality → comparison ( ( "!=" | "==" ) comparison )*

@@ -8,6 +8,13 @@ module Rlox
       @values = {}
     end
 
+    #: (Token name, Object value) -> void
+    def assign(name, value)
+      raise "Undefined variable '#{name}'." unless @values.key?(name)
+
+      @values[name] = value
+    end
+
     #: (String name, Object value) -> void
     def define(name, value)
       @values[name] = value
@@ -17,7 +24,7 @@ module Rlox
     def get(name)
       return @values[name] if @values.key?(name)
 
-      raise RuntimeError, "Undefined variable '#{name}'."
+      raise "Undefined variable '#{name}'."
     end
   end
 end
