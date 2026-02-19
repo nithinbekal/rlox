@@ -3,16 +3,18 @@
 
 module Rlox
   class Environment
-    #: -> void
-    def initialize
+    #: (?enclosing: Environment?) -> void
+    def initialize(enclosing: nil)
       @values = {}
+      @enclosing = enclosing
     end
 
     #: (Token name, Object value) -> void
     def assign(name, value)
-      raise "Undefined variable '#{name}'." unless @values.key?(name)
+      return @values[name] = value if @values.key?(name)
+      return @enclosing.assign(name, value) if @enclosing
 
-      @values[name] = value
+      raise "Undefined variable '#{name}'."
     end
 
     #: (String name, Object value) -> void
@@ -23,6 +25,7 @@ module Rlox
     #: (String name) -> Object
     def get(name)
       return @values[name] if @values.key?(name)
+      @enclosing.get(name) if @enclosing
 
       raise "Undefined variable '#{name}'."
     end
