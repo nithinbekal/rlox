@@ -17,8 +17,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Expression, statements[0]
-      assert_instance_of Binary, statements[0].expression
+      assert_instance_of Statement::Expression, statements[0]
+      assert_instance_of Expr::Binary, statements[0].expression
       assert_equal :PLUS, statements[0].expression.operator
     end
 
@@ -34,8 +34,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 2, statements.length
-      assert_instance_of Expression, statements[0]
-      assert_instance_of Expression, statements[1]
+      assert_instance_of Statement::Expression, statements[0]
+      assert_instance_of Statement::Expression, statements[1]
       assert_equal 1, statements[0].expression.value
       assert_equal 2, statements[1].expression.value
     end
@@ -62,8 +62,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Print, statements[0]
-      assert_instance_of Literal, statements[0].expression
+      assert_instance_of Statement::Print, statements[0]
+      assert_instance_of Expr::Literal, statements[0].expression
       assert_equal 42, statements[0].expression.value
     end
 
@@ -80,8 +80,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Print, statements[0]
-      assert_instance_of Binary, statements[0].expression
+      assert_instance_of Statement::Print, statements[0]
+      assert_instance_of Expr::Binary, statements[0].expression
       assert_equal :PLUS, statements[0].expression.operator
     end
 
@@ -110,8 +110,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 2, statements.length
-      assert_instance_of Print, statements[0]
-      assert_instance_of Print, statements[1]
+      assert_instance_of Statement::Print, statements[0]
+      assert_instance_of Statement::Print, statements[1]
       assert_equal 1, statements[0].expression.value
       assert_equal 2, statements[1].expression.value
     end
@@ -133,9 +133,9 @@ module Rlox
       statements = parser.parse
 
       assert_equal 3, statements.length
-      assert_instance_of Print, statements[0]
-      assert_instance_of Expression, statements[1]
-      assert_instance_of Print, statements[2]
+      assert_instance_of Statement::Print, statements[0]
+      assert_instance_of Statement::Expression, statements[1]
+      assert_instance_of Statement::Print, statements[2]
     end
 
     # Tests for complex expressions within statements
@@ -155,8 +155,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Expression, statements[0]
-      assert_instance_of Binary, statements[0].expression
+      assert_instance_of Statement::Expression, statements[0]
+      assert_instance_of Expr::Binary, statements[0].expression
       assert_equal :STAR, statements[0].expression.operator
     end
 
@@ -183,9 +183,9 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Var, statements[0]
+      assert_instance_of Statement::Var, statements[0]
       assert_equal "a", statements[0].name.lexeme
-      assert_instance_of Literal, statements[0].initializer
+      assert_instance_of Expr::Literal, statements[0].initializer
       assert_equal 42, statements[0].initializer.value
     end
 
@@ -200,7 +200,7 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Var, statements[0]
+      assert_instance_of Statement::Var, statements[0]
       assert_equal "x", statements[0].name.lexeme
       assert_nil statements[0].initializer
     end
@@ -220,9 +220,9 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Var, statements[0]
+      assert_instance_of Statement::Var, statements[0]
       assert_equal "sum", statements[0].name.lexeme
-      assert_instance_of Binary, statements[0].initializer
+      assert_instance_of Expr::Binary, statements[0].initializer
       assert_equal :PLUS, statements[0].initializer.operator
     end
 
@@ -244,8 +244,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 2, statements.length
-      assert_instance_of Var, statements[0]
-      assert_instance_of Var, statements[1]
+      assert_instance_of Statement::Var, statements[0]
+      assert_instance_of Statement::Var, statements[1]
       assert_equal "a", statements[0].name.lexeme
       assert_equal "b", statements[1].name.lexeme
     end
@@ -287,8 +287,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Expression, statements[0]
-      assert_instance_of Variable, statements[0].expression
+      assert_instance_of Statement::Expression, statements[0]
+      assert_instance_of Expr::Variable, statements[0].expression
       assert_equal "myVar", statements[0].expression.name.lexeme
     end
 
@@ -304,10 +304,10 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Expression, statements[0]
-      assert_instance_of Binary, statements[0].expression
-      assert_instance_of Variable, statements[0].expression.left
-      assert_instance_of Variable, statements[0].expression.right
+      assert_instance_of Statement::Expression, statements[0]
+      assert_instance_of Expr::Binary, statements[0].expression
+      assert_instance_of Expr::Variable, statements[0].expression.left
+      assert_instance_of Expr::Variable, statements[0].expression.right
       assert_equal "a", statements[0].expression.left.name.lexeme
       assert_equal "b", statements[0].expression.right.name.lexeme
     end
@@ -323,8 +323,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Print, statements[0]
-      assert_instance_of Variable, statements[0].expression
+      assert_instance_of Statement::Print, statements[0]
+      assert_instance_of Expr::Variable, statements[0].expression
       assert_equal "x", statements[0].expression.name.lexeme
     end
 
@@ -344,8 +344,8 @@ module Rlox
       statements = parser.parse
 
       assert_equal 2, statements.length
-      assert_instance_of Var, statements[0]
-      assert_instance_of Print, statements[1]
+      assert_instance_of Statement::Var, statements[0]
+      assert_instance_of Statement::Print, statements[1]
     end
 
     # Tests for assignment expressions
@@ -361,10 +361,10 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Expression, statements[0]
-      assert_instance_of Assign, statements[0].expression
+      assert_instance_of Statement::Expression, statements[0]
+      assert_instance_of Expr::Assign, statements[0].expression
       assert_equal "a", statements[0].expression.name.lexeme
-      assert_instance_of Literal, statements[0].expression.value
+      assert_instance_of Expr::Literal, statements[0].expression.value
       assert_equal 1, statements[0].expression.value.value
     end
 
@@ -380,9 +380,9 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Assign, statements[0].expression
+      assert_instance_of Expr::Assign, statements[0].expression
       assert_equal "a", statements[0].expression.name.lexeme
-      assert_instance_of Variable, statements[0].expression.value
+      assert_instance_of Expr::Variable, statements[0].expression.value
       assert_equal "b", statements[0].expression.value.name.lexeme
     end
 
@@ -400,9 +400,9 @@ module Rlox
       statements = parser.parse
 
       assert_equal 1, statements.length
-      assert_instance_of Assign, statements[0].expression
+      assert_instance_of Expr::Assign, statements[0].expression
       assert_equal "a", statements[0].expression.name.lexeme
-      assert_instance_of Binary, statements[0].expression.value
+      assert_instance_of Expr::Binary, statements[0].expression.value
       assert_equal :PLUS, statements[0].expression.value.operator
     end
 
@@ -422,12 +422,12 @@ module Rlox
 
       assert_equal 1, statements.length
       outer = statements[0].expression
-      assert_instance_of Assign, outer
+      assert_instance_of Expr::Assign, outer
       assert_equal "a", outer.name.lexeme
       inner = outer.value
-      assert_instance_of Assign, inner
+      assert_instance_of Expr::Assign, inner
       assert_equal "b", inner.name.lexeme
-      assert_instance_of Literal, inner.value
+      assert_instance_of Expr::Literal, inner.value
       assert_equal 1, inner.value.value
     end
 

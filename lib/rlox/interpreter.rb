@@ -18,14 +18,14 @@ module Rlox
 
     # Statement visitors
     # @override
-    #: (Expression stmt) -> void
+    #: (Statement::Expression stmt) -> void
     def visit_expression(stmt)
       evaluate(stmt.expression)
       nil
     end
 
     # @override
-    #: (Print stmt) -> void
+    #: (Statement::Print stmt) -> void
     def visit_print(stmt)
       value = evaluate(stmt.expression)
       puts stringify(value)
@@ -33,7 +33,7 @@ module Rlox
     end
 
     # @override
-    #: (Var stmt) -> void
+    #: (Statement::Var stmt) -> void
     def visit_var(stmt)
       value = nil
       value = evaluate(stmt.initializer) if stmt.initializer
@@ -43,7 +43,7 @@ module Rlox
     end
 
     # @override
-    #: (Assign expr) -> Object
+    #: (Expr::Assign expr) -> Object
     def visit_assign(expr)
       value = evaluate(expr.value)
       @environment.assign(expr.name.lexeme, value)
@@ -52,19 +52,19 @@ module Rlox
 
     # Expression visitors
     # @override
-    #: (Literal literal) -> ReturnType
+    #: (Expr::Literal literal) -> ReturnType
     def visit_literal(literal)
       literal.value
     end
 
     # @override
-    #: (Grouping grouping) -> ReturnType
+    #: (Expr::Grouping grouping) -> ReturnType
     def visit_grouping(grouping)
       evaluate(grouping.expression)
     end
 
     # @override
-    #: (Unary unary) -> ReturnType
+    #: (Expr::Unary unary) -> ReturnType
     def visit_unary(unary)
       value = evaluate(unary.right)
 
@@ -75,7 +75,7 @@ module Rlox
     end
 
     # @override
-    #: (Binary binary) -> ReturnType
+    #: (Expr::Binary binary) -> ReturnType
     def visit_binary(binary)
       left = evaluate(binary.left) #: as Numeric
       right = evaluate(binary.right) #: as Numeric
@@ -95,17 +95,9 @@ module Rlox
     end
 
     # @override
-    #: (Variable variable) -> ReturnType
+    #: (Expr::Variable variable) -> ReturnType
     def visit_variable(variable)
       @environment.get(variable.name.lexeme)
-    end
-
-    # @override
-    #: (Assign assign) -> ReturnType
-    def visit_assign(assign)
-      value = evaluate(assign.value)
-      @environment.assign(assign.name.lexeme, value)
-      value
     end
 
     private
@@ -114,7 +106,6 @@ module Rlox
     def stringify(value)
       return "nil" if value.nil?
 
-      # For numeric values, remove trailing .0 for integers
       if value.is_a?(Numeric) && value == value.to_i
         value.to_i.to_s
       else

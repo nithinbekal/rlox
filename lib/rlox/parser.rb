@@ -40,7 +40,7 @@ module Rlox
       initializer = expression if match?(:EQUAL)
 
       consume(:SEMICOLON, "Expected ';' after variable declaration")
-      Var.new(name, initializer)
+      Statement::Var.new(name, initializer)
     end
 
     #: -> Statement
@@ -56,14 +56,14 @@ module Rlox
     def print_statement
       value = expression
       consume(:SEMICOLON, "Expected ';' after expression")
-      Print.new(value)
+      Statement::Print.new(value)
     end
 
     #: -> Statement
     def expression_statement
       expr = expression
       consume(:SEMICOLON, "Expected ';' after expression")
-      Expression.new(expr)
+      Statement::Expression.new(expr)
     end
 
     # BNF: expression → equality
@@ -83,9 +83,9 @@ module Rlox
       previous
       value = assignment
 
-      raise ParserError, "Invalid assignment target." unless expr.is_a?(Variable)
+      raise ParserError, "Invalid assignment target." unless expr.is_a?(Expr::Variable)
 
-      Assign.new(expr.name, value)
+      Expr::Assign.new(expr.name, value)
     end
 
     # BNF: equality → comparison ( ( "!=" | "==" ) comparison )*
@@ -101,7 +101,7 @@ module Rlox
       while match?(:BANG_EQUAL, :EQUAL_EQUAL)
         operator = previous.type
         right = comparison
-        expression = Binary.new(expression, operator, right)
+        expression = Expr::Binary.new(expression, operator, right)
       end
 
       expression
@@ -120,7 +120,7 @@ module Rlox
       while match?(:LESS, :LESS_EQUAL, :GREATER, :GREATER_EQUAL, :NOT_EQUAL)
         operator = previous.type
         right = term
-        expression = Binary.new(expression, operator, right)
+        expression = Expr::Binary.new(expression, operator, right)
       end
 
       expression
@@ -139,7 +139,7 @@ module Rlox
       while match?(:MINUS, :PLUS)
         operator = previous.type
         right = factor
-        expression = Binary.new(expression, operator, right)
+        expression = Expr::Binary.new(expression, operator, right)
       end
 
       expression
@@ -158,7 +158,7 @@ module Rlox
       while match?(:SLASH, :STAR)
         operator = previous.type
         right = unary
-        expression = Binary.new(expression, operator, right)
+        expression = Expr::Binary.new(expression, operator, right)
       end
 
       expression
@@ -175,7 +175,7 @@ module Rlox
       if match?(:BANG, :MINUS)
         operator = previous.type
         right = unary
-        return Unary.new(operator, right)
+        return Expr::Unary.new(operator, right)
       end
 
       primary #: as !nil
@@ -193,17 +193,17 @@ module Rlox
     #
     #: -> Expr?
     def primary
-      return Literal.new(false) if match?(:FALSE)
-      return Literal.new(true) if match?(:TRUE)
-      return Literal.new(nil) if match?(:NIL)
-      return Literal.new(previous.literal) if match?(:NUMBER, :STRING)
-      return Variable.new(previous) if match?(:IDENTIFIER)
+      return Expr::Literal.new(false) if match?(:FALSE)
+      return Expr::Literal.new(true) if match?(:TRUE)
+      return Expr::Literal.new(nil) if match?(:NIL)
+      return Expr::Literal.new(previous.literal) if match?(:NUMBER, :STRING)
+      return Expr::Variable.new(previous) if match?(:IDENTIFIER)
 
       return unless match?(:LEFT_PAREN)
 
       expr = expression
       consume(:RIGHT_PAREN, "Expected ')' after expression")
-      Grouping.new(expr)
+      Expr::Grouping.new(expr)
     end
 
     #: -> void

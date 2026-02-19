@@ -55,7 +55,7 @@ module Rlox
       return if statements.empty?
 
       statements.each do |stmt|
-        if stmt.is_a?(Rlox::Expression)
+        if stmt.is_a?(Rlox::Statement::Expression)
           result = @interpreter.evaluate(stmt.expression)
           return @interpreter.send(:stringify, result)
         else

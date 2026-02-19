@@ -28,7 +28,7 @@ module Rlox
 
     # For backward compatibility with tests: if there's only one expression statement,
     # return its value. Otherwise, execute all statements and return nil.
-    if statements.length == 1 && statements.first.is_a?(Expression)
+    if statements.length == 1 && statements.first.is_a?(Statement::Expression)
       interpreter.evaluate(statements.first.expression)
     else
       statements.each { |stmt| interpreter.execute(stmt) }
