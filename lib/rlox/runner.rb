@@ -44,6 +44,7 @@ module Rlox
       statements = parser.parse
 
       statements.each { |stmt| @interpreter.execute(stmt) }
+      nil
     end
 
     def evaluate(source)

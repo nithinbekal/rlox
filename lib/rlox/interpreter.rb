@@ -100,6 +100,21 @@ module Rlox
       @environment.get(variable.name.lexeme)
     end
 
+    # @override
+    #: (Statement::Block block_statement) -> void
+    def visit_block(block_statement)
+      execute_block(block_statement.statements, Environment.new(enclosing: @environment))
+    end
+
+    #: (Array[Statement] statements, Environment environment) -> void
+    def execute_block(statements, environment)
+      previous = @environment
+      @environment = environment
+      statements.each { |statement| execute(statement) }
+      @environment = previous
+    ensure
+      @environment = previous
+    end
     private
 
     #: (Object) -> String

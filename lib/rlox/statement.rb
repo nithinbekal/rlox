@@ -10,6 +10,7 @@ module Rlox
   end
 end
 
+require_relative "statement/block"
 require_relative "statement/expression"
 require_relative "statement/print"
 require_relative "statement/var"

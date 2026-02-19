@@ -58,5 +58,11 @@ module Rlox
     def visit_assign(assign)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Statement::Block block_statement) -> void
+    def visit_block(block_statement)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end

@@ -45,11 +45,28 @@ module Rlox
 
     #: -> Statement
     def statement
-      if match?(:PRINT)
-        print_statement
-      else
-        expression_statement
+      return print_statement if match?(:PRINT)
+      return Statement::Block.new(block) if match?(:LEFT_CURLY_BRACE)
+
+      expression_statement
+    end
+
+    #: -> Array[Statement]
+    def block
+      statements = []
+
+      until check?(:RIGHT_CURLY_BRACE) || at_end?
+        statements << declaration
       end
+
+      consume(:RIGHT_CURLY_BRACE, "Expected '}' after block")
+
+      statements
+    end
+
+    #: (Symbol type) -> bool
+    def check?(type)
+      !at_end? && peek.type == type
     end
 
     #: -> Statement

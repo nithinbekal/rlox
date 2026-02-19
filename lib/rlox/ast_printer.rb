@@ -63,5 +63,11 @@ module Rlox
     def visit_assign(assign)
       "#{assign.name.lexeme} = #{assign.value.accept(self)}"
     end
+
+    # @override
+    #: (Statement::Block block_statement) -> ReturnType
+    def visit_block_statement(block_statement)
+      block_statement.statements.map { |statement| statement.accept(self) }.join("\n")
+    end
   end
 end

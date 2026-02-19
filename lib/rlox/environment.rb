@@ -25,7 +25,7 @@ module Rlox
     #: (String name) -> Object
     def get(name)
       return @values[name] if @values.key?(name)
-      @enclosing.get(name) if @enclosing
+      return @enclosing.get(name) if @enclosing
 
       raise "Undefined variable '#{name}'."
     end
