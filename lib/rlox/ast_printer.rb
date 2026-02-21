@@ -76,5 +76,11 @@ module Rlox
       "if #{if_statement.condition.accept(self)} #{if_statement.then_branch.accept(self)} " \
         "#{if_statement.else_branch.accept(self)}"
     end
+
+    # @override
+    #: (Expr::Logical logical) -> ReturnType
+    def visit_logical(logical)
+      "#{logical.operator} #{logical.left.accept(self)} #{logical.right.accept(self)}"
+    end
   end
 end

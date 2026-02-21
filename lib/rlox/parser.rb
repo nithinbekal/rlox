@@ -105,7 +105,7 @@ module Rlox
     #
     #: -> Expr
     def assignment
-      expr = equality
+      expr = or_expr
       return expr unless match?(:EQUAL)
 
       previous
@@ -114,6 +114,36 @@ module Rlox
       raise ParserError, "Invalid assignment target." unless expr.is_a?(Expr::Variable)
 
       Expr::Assign.new(expr.name, value)
+    end
+
+    # BNF: or_expr → and_expr ( "or" and_expr )*
+    #
+    #: -> Expr
+    def or_expr
+      expr = and_expr
+
+      while match?(:OR)
+        operator = previous.type
+        right = and_expr
+        expr = Expr::Logical.new(expr, operator, right)
+      end
+
+      expr
+    end
+
+    # BNF: and_expr → equality ( "and" equality )*
+    #
+    #: -> Expr
+    def and_expr
+      expr = equality
+
+      while match?(:AND)
+        operator = previous.type
+        right = equality
+        expr = Expr::Logical.new(expr, operator, right)
+      end
+
+      expr
     end
 
     # BNF: equality → comparison ( ( "!=" | "==" ) comparison )*

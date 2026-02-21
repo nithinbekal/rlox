@@ -117,6 +117,20 @@ module Rlox
       end
     end
 
+    # @override
+    #: (Expr::Logical expr) -> ReturnType
+    def visit_logical(expr)
+      left = evaluate(expr.left)
+
+      if expr.operator == :OR
+        return left if left
+      else
+        return left unless left
+      end
+
+      evaluate(expr.right)
+    end
+
     #: (Array[Statement] statements, Environment environment) -> void
     def execute_block(statements, environment)
       previous = @environment

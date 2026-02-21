@@ -70,5 +70,11 @@ module Rlox
     def visit_if_statement(if_statement)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Expr::Logical logical) -> ReturnType
+    def visit_logical(logical)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end
