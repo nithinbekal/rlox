@@ -106,6 +106,17 @@ module Rlox
       execute_block(block_statement.statements, Environment.new(enclosing: @environment))
     end
 
+    # @override
+    #: (Statement::If if_statement) -> void
+    def visit_if_statement(if_statement)
+      condition = evaluate(if_statement.condition)
+      if condition
+        if_statement.then_branch.accept(self)
+      elsif if_statement.else_branch
+        if_statement.else_branch.accept(self)
+      end
+    end
+
     #: (Array[Statement] statements, Environment environment) -> void
     def execute_block(statements, environment)
       previous = @environment

@@ -64,5 +64,11 @@ module Rlox
     def visit_block(block_statement)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Statement::If if_statement) -> void
+    def visit_if_statement(if_statement)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end

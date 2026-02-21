@@ -66,8 +66,15 @@ module Rlox
 
     # @override
     #: (Statement::Block block_statement) -> ReturnType
-    def visit_block_statement(block_statement)
+    def visit_block(block_statement)
       block_statement.statements.map { |statement| statement.accept(self) }.join("\n")
+    end
+
+    # @override
+    #: (Statement::If if_statement) -> ReturnType
+    def visit_if_statement(if_statement)
+      "if #{if_statement.condition.accept(self)} #{if_statement.then_branch.accept(self)} " \
+        "#{if_statement.else_branch.accept(self)}"
     end
   end
 end

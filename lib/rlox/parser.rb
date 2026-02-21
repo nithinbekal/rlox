@@ -45,6 +45,7 @@ module Rlox
 
     #: -> Statement
     def statement
+      return if_statement if match?(:IF)
       return print_statement if match?(:PRINT)
       return Statement::Block.new(block) if match?(:LEFT_CURLY_BRACE)
 
@@ -65,6 +66,18 @@ module Rlox
     #: (Symbol type) -> bool
     def check?(type)
       !at_end? && peek.type == type
+    end
+
+    #: -> Statement
+    def if_statement
+      consume(:LEFT_PAREN, "Expected '(' after 'if'")
+      condition = expression
+      consume(:RIGHT_PAREN, "Expected ')' after condition")
+
+      then_branch = statement
+      else_branch = statement if match?(:ELSE)
+
+      Statement::If.new(condition, then_branch, else_branch)
     end
 
     #: -> Statement
