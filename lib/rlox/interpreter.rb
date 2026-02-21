@@ -115,6 +115,7 @@ module Rlox
     ensure
       @environment = previous
     end
+
     private
 
     #: (Object) -> String

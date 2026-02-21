@@ -55,9 +55,7 @@ module Rlox
     def block
       statements = []
 
-      until check?(:RIGHT_CURLY_BRACE) || at_end?
-        statements << declaration
-      end
+      statements << declaration until check?(:RIGHT_CURLY_BRACE) || at_end?
 
       consume(:RIGHT_CURLY_BRACE, "Expected '}' after block")
 
