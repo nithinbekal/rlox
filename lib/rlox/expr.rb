@@ -10,9 +10,3 @@ module Rlox
   end
 end
 
-require_relative "expr/assign"
-require_relative "expr/binary"
-require_relative "expr/grouping"
-require_relative "expr/literal"
-require_relative "expr/unary"
-require_relative "expr/variable"

@@ -12,3 +12,5 @@ gem "rubocop"
 
 gem "sorbet"
 gem "tapioca", require: false
+
+gem "zeitwerk", "~> 2.7"
