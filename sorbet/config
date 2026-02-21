@@ -1,3 +1,5 @@
 --dir
 lib
+--dir
+sorbet/rbi
 --enable-experimental-rbs-comments
