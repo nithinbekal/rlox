@@ -118,6 +118,14 @@ module Rlox
     end
 
     # @override
+    #: (Statement::While while_statement) -> void
+    def visit_while_statement(while_statement)
+      while evaluate(while_statement.condition)
+        execute(while_statement.body)
+      end
+    end
+
+    # @override
     #: (Expr::Logical expr) -> ReturnType
     def visit_logical(expr)
       left = evaluate(expr.left)

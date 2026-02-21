@@ -82,5 +82,11 @@ module Rlox
     def visit_logical(logical)
       "#{logical.operator} #{logical.left.accept(self)} #{logical.right.accept(self)}"
     end
+
+    # @override
+    #: (Statement::While while_statement) -> ReturnType
+    def visit_while_statement(while_statement)
+      "while #{while_statement.condition.accept(self)} #{while_statement.body.accept(self)}"
+    end
   end
 end

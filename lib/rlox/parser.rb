@@ -46,6 +46,7 @@ module Rlox
     #: -> Statement
     def statement
       return if_statement if match?(:IF)
+      return while_statement if match?(:WHILE)
       return print_statement if match?(:PRINT)
       return Statement::Block.new(block) if match?(:LEFT_CURLY_BRACE)
 
@@ -78,6 +79,17 @@ module Rlox
       else_branch = statement if match?(:ELSE)
 
       Statement::If.new(condition, then_branch, else_branch)
+    end
+
+    #: -> Statement
+    def while_statement
+      consume(:LEFT_PAREN, "Expected '(' after 'while'")
+      condition = expression
+
+      consume(:RIGHT_PAREN, "Expected ')' after condition")
+      body = statement
+
+      Statement::While.new(condition, body)
     end
 
     #: -> Statement

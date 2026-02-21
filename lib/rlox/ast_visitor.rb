@@ -76,5 +76,11 @@ module Rlox
     def visit_logical(logical)
       raise NotImplementedError, "Subclasses must implement this method"
     end
+
+    # @abstract
+    #: (Statement::While while_statement) -> void
+    def visit_while_statement(while_statement)
+      raise NotImplementedError, "Subclasses must implement this method"
+    end
   end
 end
