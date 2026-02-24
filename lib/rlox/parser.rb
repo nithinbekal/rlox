@@ -45,6 +45,7 @@ module Rlox
 
     #: -> Statement
     def statement
+      return for_statement if match?(:FOR)
       return if_statement if match?(:IF)
       return while_statement if match?(:WHILE)
       return print_statement if match?(:PRINT)
@@ -67,6 +68,40 @@ module Rlox
     #: (Symbol type) -> bool
     def check?(type)
       !at_end? && peek.type == type
+    end
+
+    #: -> Statement
+    def for_statement
+      consume(:LEFT_PAREN, "Expected '(' after 'for'")
+      initializer = if match?(:SEMICOLON)
+        nil
+      elsif match?(:VAR)
+        var_declaration
+      else
+        expression_statement
+      end
+
+      condition = expression unless check?(:SEMICOLON)
+      consume(:SEMICOLON, "Expected ';' after condition")
+
+      increment  = expression unless check?(:RIGHT_PAREN)
+      consume(:RIGHT_PAREN, "Expected ')' after for clauses")
+
+      body = statement
+
+      if increment
+        body = Statement::Block.new([body, Statement::Expression.new(increment)])
+      end
+
+      condition ||= Expression::Literal.new(true)
+
+      body = Statement::While.new(condition, body)
+
+      if initializer
+        body = Statement::Block.new([initializer, body])
+      end
+
+      body
     end
 
     #: -> Statement
